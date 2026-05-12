@@ -87,7 +87,7 @@
             <label class="filter-label">Target Distance</label>
             <div class="distance-slider-wrap">
               <input type="range" id="filter-distance" min="1" max="100" value="10" step="1" />
-              <span id="distance-value" class="slider-value">10 km</span>
+              <span id="distance-value" class="slider-value">6 mi</span>
             </div>
             <small class="filter-hint" style="padding-left:0">Used for loop routes; advisory for A→B</small>
           </div>
@@ -192,6 +192,13 @@
             <span class="toggle-switch"></span>
             Dark Mode
           </label>
+          <div style="margin-top:12px;">
+            <label class="filter-label">Units</label>
+            <div class="route-mode-group">
+              <button class="unit-btn" data-unit="km">km</button>
+              <button class="unit-btn active" data-unit="mi">mi</button>
+            </div>
+          </div>
         </div>
       </section>
 

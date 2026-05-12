@@ -285,8 +285,8 @@ const Overlays = {
     ctx.fillStyle = AppState.darkMode ? '#8b949e' : '#656d76';
     ctx.font = '10px sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText(`${Math.round(maxE)}m`, padding.left + 2, padding.top + 10);
-    ctx.fillText(`${Math.round(minE)}m`, padding.left + 2, h - padding.bottom - 4);
+    ctx.fillText(Filters.formatElev(maxE), padding.left + 2, padding.top + 10);
+    ctx.fillText(Filters.formatElev(minE), padding.left + 2, h - padding.bottom - 4);
   },
 
   /** Refresh all active overlays */

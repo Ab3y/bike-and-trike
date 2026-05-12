@@ -33,6 +33,7 @@ const AppState = {
 
   // Theme
   darkMode: true,
+  units: 'mi', // 'km' | 'mi'
 
   // Overlays
   crimeLayer: null,    // L.layerGroup of clickable circle markers

@@ -3,6 +3,37 @@
    ============================================= */
 
 const Filters = {
+  KM_TO_MI: 0.621371,
+  M_TO_FT: 3.28084,
+
+  /** Format distance with current units */
+  formatDist(meters) {
+    if (AppState.units === 'mi') {
+      const mi = meters / 1609.344;
+      return mi >= 10 ? mi.toFixed(1) + ' mi' : mi < 0.1 ? Math.round(meters * this.M_TO_FT) + ' ft' : mi.toFixed(1) + ' mi';
+    }
+    return meters >= 1000 ? (meters / 1000).toFixed(1) + ' km' : Math.round(meters) + ' m';
+  },
+
+  /** Format elevation with current units */
+  formatElev(meters) {
+    if (AppState.units === 'mi') return Math.round(meters * this.M_TO_FT) + ' ft';
+    return Math.round(meters) + ' m';
+  },
+
+  /** Update the distance slider label for current units */
+  _updateDistLabel() {
+    const slider = document.getElementById('filter-distance');
+    const label = document.getElementById('distance-value');
+    const kmVal = parseInt(slider.value);
+    if (AppState.units === 'mi') {
+      const mi = (kmVal * this.KM_TO_MI).toFixed(0);
+      label.textContent = mi >= 62 ? '62+ mi' : mi + ' mi';
+    } else {
+      label.textContent = kmVal >= 100 ? '100+ km' : kmVal + ' km';
+    }
+  },
+
   init() {
     // ── Distance slider ──
     const distSlider = document.getElementById('filter-distance');
@@ -10,7 +41,7 @@ const Filters = {
     distSlider.addEventListener('input', (e) => {
       const km = parseInt(e.target.value);
       AppState.filters.targetDistance = km;
-      distValue.textContent = km >= 100 ? '100+ km' : km + ' km';
+      Filters._updateDistLabel();
     });
     // Recalculate on release (not every pixel drag)
     distSlider.addEventListener('change', () => {
@@ -147,6 +178,21 @@ const Filters = {
       if (AppState.elevationData.length > 0 && AppState.filters.elevation) {
         Overlays.drawElevationChart(AppState.elevationData);
       }
+    });
+
+    // ── Units toggle (km / mi) ──
+    document.querySelectorAll('.unit-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        AppState.units = btn.dataset.unit;
+        // Refresh all displayed values
+        Filters._updateDistLabel();
+        if (AppState.routeData) UI.updateRouteInfo(AppState.routeData);
+        if (AppState.elevationData.length > 0 && AppState.filters.elevation) {
+          Overlays.drawElevationChart(AppState.elevationData);
+        }
+      });
     });
 
     // ── Collapsible panels ──

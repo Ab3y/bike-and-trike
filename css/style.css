@@ -563,6 +563,27 @@ body {
   color: var(--neon-blue);
 }
 
+.unit-btn {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.unit-btn:hover { border-color: var(--accent); }
+
+.unit-btn.active {
+  border-color: var(--accent);
+  background: rgba(0, 180, 255, 0.1);
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.15);
+  color: var(--neon-blue);
+}
+
 /* ---- Distance Slider ---- */
 .distance-slider-wrap {
   display: flex;

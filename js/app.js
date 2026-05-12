@@ -17,15 +17,14 @@ const UI = {
     panel.classList.remove('hidden');
     exportPanel.classList.remove('hidden');
 
-    document.getElementById('route-distance').textContent =
-      data.distance >= 1000 ? (data.distance / 1000).toFixed(1) + ' km' : Math.round(data.distance) + ' m';
+    document.getElementById('route-distance').textContent = Filters.formatDist(data.distance);
 
     const mins = Math.round(data.duration / 60);
     document.getElementById('route-duration').textContent =
       mins >= 60 ? Math.floor(mins / 60) + 'h ' + (mins % 60) + 'm' : mins + ' min';
 
-    document.getElementById('route-ascent').textContent = Math.round(data.ascent) + ' m';
-    document.getElementById('route-descent').textContent = Math.round(data.descent) + ' m';
+    document.getElementById('route-ascent').textContent = Filters.formatElev(data.ascent);
+    document.getElementById('route-descent').textContent = Filters.formatElev(data.descent);
 
     if (AppState.filters.elevation && AppState.elevationData.length > 0) {
       document.getElementById('elevation-chart-container').style.display = '';
