@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bike &amp; Trike — Route Planner (Beta)</title>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Leaflet Heat -->
+  <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+
+  <!-- Geocoder -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.css" />
+  <script src="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.js"></script>
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside id="sidebar" class="sidebar open">
+    <div class="sidebar-header">
+      <h1>🚲 Bike &amp; Trike <span class="beta-tag">BETA</span></h1>
+      <button id="sidebar-toggle" class="btn-icon" aria-label="Toggle sidebar">☰</button>
+    </div>
+
+    <div class="sidebar-content">
+      <!-- Route Inputs -->
+      <section class="panel collapsible">
+        <h2 class="panel-toggle">Route <span class="chevron">▾</span></h2>
+        <div class="panel-body">
+          <!-- Route Mode -->
+          <div class="route-mode-group">
+            <button class="route-mode-btn active" data-mode="loop">🔄 Loop</button>
+            <button class="route-mode-btn" data-mode="point-to-point">📍 A → B</button>
+          </div>
+          <div class="input-group">
+            <label for="start-input">Start</label>
+            <input type="text" id="start-input" placeholder="Click map or type address" />
+          </div>
+          <div id="end-input-group" class="input-group hidden">
+            <label for="end-input">End</label>
+            <input type="text" id="end-input" placeholder="Click map or type address" />
+          </div>
+          <button id="calc-route" class="btn-primary" disabled>Calculate Route</button>
+          <button id="clear-route" class="btn-secondary">Clear</button>
+        </div>
+      </section>
+
+      <!-- Route Info -->
+      <section id="route-info" class="panel collapsible hidden">
+        <h2 class="panel-toggle">Route Info <span class="chevron">▾</span></h2>
+        <div class="panel-body">
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Distance</span>
+              <span id="route-distance" class="info-value">—</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Duration</span>
+              <span id="route-duration" class="info-value">—</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Elevation ↑</span>
+              <span id="route-ascent" class="info-value">—</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Elevation ↓</span>
+              <span id="route-descent" class="info-value">—</span>
+            </div>
+          </div>
+          <div id="elevation-chart-container">
+            <canvas id="elevation-chart" height="120"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Filters -->
+      <section class="panel collapsible">
+        <h2 class="panel-toggle">Filters <span class="chevron">▾</span></h2>
+        <div class="panel-body">
+
+          <!-- Distance slider -->
+          <div class="filter-group">
+            <label class="filter-label">Target Distance</label>
+            <div class="distance-slider-wrap">
+              <input type="range" id="filter-distance" min="1" max="100" value="10" step="1" />
+              <span id="distance-value" class="slider-value">10 km</span>
+            </div>
+            <small class="filter-hint" style="padding-left:0">Used for loop routes; advisory for A→B</small>
+          </div>
+
+          <!-- Elevation preference slider -->
+          <div class="filter-group">
+            <label class="filter-label">Elevation Preference</label>
+            <div class="elevation-pref-wrap">
+              <span class="elev-label-left">🟢 Flat</span>
+              <input type="range" id="filter-elev-pref" min="0" max="100" value="50" step="5" />
+              <span class="elev-label-right">🔴 Hilly</span>
+            </div>
+            <div id="elev-difficulty-badge" class="elev-badge moderate">Moderate</div>
+            <small class="filter-hint" style="padding-left:0">Prefers flatter or hillier routes &amp; colors route by gradient</small>
+          </div>
+
+          <!-- Family Friendly toggle -->
+          <div class="filter-group">
+            <label class="toggle-label">
+              <input type="checkbox" id="filter-family-friendly" />
+              <span class="toggle-switch"></span>
+              👨‍👩‍👧‍👦 Family Friendly
+            </label>
+            <small class="filter-hint">Shows parks, restrooms, playgrounds &amp; water near route. Prefers gentle grades.</small>
+            <div id="family-score-display" class="family-score hidden">
+              <span id="family-score-stars"></span>
+              <span id="family-score-text"></span>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label class="toggle-label">
+              <input type="checkbox" id="filter-bike-paths" />
+              <span class="toggle-switch"></span>
+              Show Nearby Bike Paths
+            </label>
+          </div>
+
+          <div class="filter-group">
+            <label class="toggle-label">
+              <input type="checkbox" id="filter-crime" />
+              <span class="toggle-switch"></span>
+              Crime Overlay
+              <span class="badge demo">Demo</span>
+            </label>
+          </div>
+
+          <div class="filter-group">
+            <label class="toggle-label">
+              <input type="checkbox" id="filter-elevation" checked />
+              <span class="toggle-switch"></span>
+              Elevation Profile
+            </label>
+          </div>
+
+          <div class="filter-group">
+            <label class="toggle-label">
+              <input type="checkbox" id="filter-crowd" />
+              <span class="toggle-switch"></span>
+              Crowd Level
+              <span class="badge demo">Demo</span>
+            </label>
+          </div>
+
+          <div class="filter-group">
+            <label class="toggle-label">
+              <input type="checkbox" id="filter-kid-friendly" />
+              <span class="toggle-switch"></span>
+              Prefer Safer Routes
+            </label>
+            <small class="filter-hint">Prefers bike paths &amp; lower-traffic roads</small>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">Surface Type</label>
+            <div class="surface-buttons">
+              <button class="surface-btn active" data-surface="road">🛣️ Road</button>
+              <button class="surface-btn" data-surface="gravel">🪨 Gravel</button>
+              <button class="surface-btn" data-surface="dirt">🌿 Dirt</button>
+              <button class="surface-btn" data-surface="rocky">⛰️ Rocky</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Export -->
+      <section id="export-panel" class="panel collapsible hidden">
+        <h2 class="panel-toggle">Export <span class="chevron">▾</span></h2>
+        <div class="panel-body">
+          <button id="export-google" class="btn-export">🗺️ Open in Google Maps</button>
+          <button id="export-kml" class="btn-export">📥 Download KML</button>
+          <button id="export-gpx" class="btn-export">📥 Download GPX</button>
+        </div>
+      </section>
+
+      <!-- Settings -->
+      <section class="panel collapsible">
+        <h2 class="panel-toggle">Settings <span class="chevron">▾</span></h2>
+        <div class="panel-body">
+          <label class="toggle-label">
+            <input type="checkbox" id="dark-mode-toggle" checked />
+            <span class="toggle-switch"></span>
+            Dark Mode
+          </label>
+        </div>
+      </section>
+
+      <footer class="sidebar-footer">
+        <small>Routes via BRouter (free, no key). OSRM fallback. Overlays are simulated demo data — not safety guidance.</small>
+      </footer>
+    </div>
+  </aside>
+
+  <!-- Mobile toggle -->
+  <button id="mobile-sidebar-toggle" class="mobile-toggle" aria-label="Open filters">☰</button>
+
+  <!-- Map -->
+  <div id="map"></div>
+
+  <!-- Right-click context menu -->
+  <div id="context-menu" class="context-menu hidden">
+    <button id="ctx-set-start" class="ctx-item">📍 Set Start Here</button>
+    <button id="ctx-set-end" class="ctx-item">🏁 Set End Here</button>
+    <hr class="ctx-divider" />
+    <button id="ctx-bike-paths" class="ctx-item">🚴 Show Bike Paths Here</button>
+  </div>
+
+  <!-- Click mode indicator -->
+  <div id="click-mode" class="click-mode hidden">
+    <span id="click-mode-text"></span>
+    <button id="click-mode-cancel" class="btn-icon">✕</button>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/state.js"></script>
+  <script src="js/overlays.js"></script>
+  <script src="js/routing.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/export.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
