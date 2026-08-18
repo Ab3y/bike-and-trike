@@ -25,7 +25,7 @@ const Filters = {
   _updateDistLabel() {
     const slider = document.getElementById('filter-distance');
     const label = document.getElementById('distance-value');
-    const kmVal = parseInt(slider.value);
+    const kmVal = parseFloat(slider.value);
     if (AppState.units === 'mi') {
       const mi = (kmVal * this.KM_TO_MI).toFixed(0);
       label.textContent = mi >= 62 ? '62+ mi' : mi + ' mi';
@@ -39,7 +39,7 @@ const Filters = {
     const distSlider = document.getElementById('filter-distance');
     const distValue = document.getElementById('distance-value');
     distSlider.addEventListener('input', (e) => {
-      const km = parseInt(e.target.value);
+      const km = parseFloat(e.target.value);
       AppState.filters.targetDistance = km;
       Filters._updateDistLabel();
     });

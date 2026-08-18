@@ -281,11 +281,26 @@ function initApp() {
   });
 
   // ── Geolocation ──
+  const loadDefaultOverlays = () => {
+    Overlays.toggleBikePaths(true);
+    Overlays.toggleFamilyPOIs(true);
+  };
+
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
-      (pos) => map.setView([pos.coords.latitude, pos.coords.longitude], 13),
-      () => {}
+      (pos) => {
+        map.setView([pos.coords.latitude, pos.coords.longitude], 13);
+        loadDefaultOverlays();
+      },
+      (error) => {
+        console.info('Location unavailable; using the default map area.', error.message);
+        loadDefaultOverlays();
+      },
+      { enableHighAccuracy: true, timeout: 8000, maximumAge: 300000 }
     );
+  } else {
+    console.info('Geolocation is not supported; using the default map area.');
+    loadDefaultOverlays();
   }
 }
 

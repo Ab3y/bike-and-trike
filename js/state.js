@@ -23,13 +23,13 @@ const AppState = {
     crime: false,
     elevation: true,
     crowd: false,
-    kidFriendly: false,
-    familyFriendly: false,
-    bikePaths: false,
+    kidFriendly: true,
+    familyFriendly: true,
+    bikePaths: true,
     avoidHighways: false,
     surface: 'road',    // road | gravel | dirt | rocky
-    targetDistance: 10,  // km
-    elevationPref: 50    // 0 = flattest, 100 = hilliest
+    targetDistance: 1.609344, // 1 mile in km
+    elevationPref: 20    // 0 = flattest, 100 = hilliest
   },
 
   // Theme

@@ -86,8 +86,8 @@
           <div class="filter-group">
             <label class="filter-label">Target Distance</label>
             <div class="distance-slider-wrap">
-              <input type="range" id="filter-distance" min="1" max="100" value="10" step="1" />
-              <span id="distance-value" class="slider-value">6 mi</span>
+              <input type="range" id="filter-distance" min="1.609344" max="100" value="1.609344" step="0.1" />
+              <span id="distance-value" class="slider-value">1 mi</span>
             </div>
             <small class="filter-hint" style="padding-left:0">Used for loop routes; advisory for A→B</small>
           </div>
@@ -97,17 +97,17 @@
             <label class="filter-label">Elevation Preference</label>
             <div class="elevation-pref-wrap">
               <span class="elev-label-left">🟢 Flat</span>
-              <input type="range" id="filter-elev-pref" min="0" max="100" value="50" step="5" />
+              <input type="range" id="filter-elev-pref" min="0" max="100" value="20" step="5" />
               <span class="elev-label-right">🔴 Hilly</span>
             </div>
-            <div id="elev-difficulty-badge" class="elev-badge moderate">Moderate</div>
+            <div id="elev-difficulty-badge" class="elev-badge easy">Easy</div>
             <small class="filter-hint" style="padding-left:0">Prefers flatter or hillier routes &amp; colors route by gradient</small>
           </div>
 
           <!-- Family Friendly toggle -->
           <div class="filter-group">
             <label class="toggle-label">
-              <input type="checkbox" id="filter-family-friendly" />
+              <input type="checkbox" id="filter-family-friendly" checked />
               <span class="toggle-switch"></span>
               👨‍👩‍👧‍👦 Family Friendly
             </label>
@@ -120,7 +120,7 @@
 
           <div class="filter-group">
             <label class="toggle-label">
-              <input type="checkbox" id="filter-bike-paths" />
+              <input type="checkbox" id="filter-bike-paths" checked />
               <span class="toggle-switch"></span>
               Show Nearby Bike Paths
             </label>
@@ -154,7 +154,7 @@
 
           <div class="filter-group">
             <label class="toggle-label">
-              <input type="checkbox" id="filter-kid-friendly" />
+              <input type="checkbox" id="filter-kid-friendly" checked />
               <span class="toggle-switch"></span>
               Prefer Safer Routes
             </label>
