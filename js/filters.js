@@ -147,6 +147,12 @@ const Filters = {
       AppState.queueRouteUpdate();
     });
 
+    // ── Avoid highways toggle — triggers route recalculation ──
+    document.getElementById('filter-avoid-highways').addEventListener('change', (e) => {
+      AppState.filters.avoidHighways = e.target.checked;
+      AppState.queueRouteUpdate();
+    });
+
     // ── Surface type buttons — triggers route recalculation ──
     document.querySelectorAll('.surface-btn').forEach(btn => {
       btn.addEventListener('click', () => {

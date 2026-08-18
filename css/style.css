@@ -457,6 +457,10 @@ body {
   cursor: pointer;
 }
 
+.sidebar:not(.open) ~ .mobile-toggle {
+  display: block;
+}
+
 @media (max-width: 768px) {
   .sidebar {
     width: 100vw;
@@ -464,14 +468,6 @@ body {
 
   .sidebar.open ~ #map {
     left: 0;
-  }
-
-  .mobile-toggle {
-    display: block;
-  }
-
-  .sidebar:not(.open) ~ .mobile-toggle {
-    display: block;
   }
 
   .sidebar.open ~ .mobile-toggle {

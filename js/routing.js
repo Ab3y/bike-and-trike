@@ -7,11 +7,11 @@ const Routing = {
   BROUTER_URL: 'https://brouter.de/brouter',
   OSRM_URL: 'https://router.project-osrm.org/route/v1',
 
-  /** Map surface + kid-friendly + elevation pref to BRouter profile */
+  /** Map route preferences to a BRouter profile */
   getBRouterProfile() {
     const elevPref = AppState.filters.elevationPref;
-    // Family-friendly or very flat preference → always use safety profile
-    if (AppState.filters.familyFriendly || elevPref <= 15) return 'safety';
+    // Safety constraints take precedence over surface and elevation preferences.
+    if (AppState.filters.avoidHighways || AppState.filters.familyFriendly || elevPref <= 15) return 'safety';
     if (AppState.filters.kidFriendly) return 'safety';
 
     // Low elevation pref → prefer trekking (gentler) over fastbike
@@ -74,6 +74,15 @@ const Routing = {
     try {
       await this._routeViaBRouter();
     } catch (brouterErr) {
+      if (AppState.filters.avoidHighways) {
+        console.error('BRouter failed with highway avoidance enabled:', brouterErr);
+        alert(
+          `Route calculation failed.\n\n` +
+          `BRouter: ${brouterErr.message}\n\n` +
+          `Highway avoidance cannot be guaranteed by the fallback router.`
+        );
+        return;
+      }
       console.warn('BRouter failed, trying OSRM fallback:', brouterErr.message);
       try {
         await this._routeViaOSRM();

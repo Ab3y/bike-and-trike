@@ -21,6 +21,8 @@ No accounts. No API keys. No install. Just open `index.html` and go.
 - **🌙 Dark / Light Mode** — Full dark theme with blue neon route glow. Toggle to light mode anytime.
 - **🛣️ Surface Type** — Choose Road, Gravel, Dirt, or Rocky to match your bike and your kids' comfort level.
 - **🛡️ Prefer Safer Routes** — Routes along bike paths and lower-traffic roads.
+- **🚫 Avoid Highways** — Uses BRouter's safety-focused profile and will not silently fall back to routing that ignores the preference.
+- **📍 Local Map Start** — With browser permission, starts the map in your current area.
 - **📏 Distance Slider** — Dynamically adjust target distance from 1–100 km.
 - **📊 Elevation Profile** — Chart showing elevation along the route with min/max labels.
 - **🗺️ Export** — Open your route in Google Maps, or download as KML or GPX.

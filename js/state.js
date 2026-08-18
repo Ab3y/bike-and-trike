@@ -26,6 +26,7 @@ const AppState = {
     kidFriendly: false,
     familyFriendly: false,
     bikePaths: false,
+    avoidHighways: false,
     surface: 'road',    // road | gravel | dirt | rocky
     targetDistance: 10,  // km
     elevationPref: 50    // 0 = flattest, 100 = hilliest
