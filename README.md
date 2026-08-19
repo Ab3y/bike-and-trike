@@ -2,6 +2,8 @@
 
 **A bike route planner built by a dad who wanted to find safe, fun rides to take his kids on.**
 
+> **Live demo:** [Open Bike & Trike](https://ab3y.github.io/bike-and-trike/)
+
 I got tired of guessing which routes were safe for my kids — wondering if the hills were too steep for little legs, if there were bathrooms nearby, or if we'd end up on a busy road with no bike lane. So I built this.
 
 Bike & Trike is a fully interactive, browser-based route planner designed with family cycling in mind. Set a starting point, pick how far you want to ride, and it builds a loop route that brings you right back home. Toggle on family-friendly mode to see nearby parks, playgrounds, restrooms, and water fountains along the way. Dial the elevation down to "flat" so the kids aren't walking their bikes up hills. Check the crime overlay before heading into an unfamiliar neighborhood. It even scores your route on how family-friendly it is.
